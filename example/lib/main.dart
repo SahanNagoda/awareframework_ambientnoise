@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  AmbientnoiseSensor sensor;
+  AmbientNoiseSensor sensor;
   AmbientnoiseSensorConfig config;
 
   @override
@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
     config = AmbientnoiseSensorConfig()
       ..debug = true;
 
-    sensor = new AmbientnoiseSensor(config);
+    sensor = new AmbientNoiseSensor(config);
 
   }
 
@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
           appBar: new AppBar(
             title: const Text('Plugin Example App'),
           ),
-          body: new AmbientnoiseCard(sensor: sensor,)
+          body: new AmbientNoiseCard(sensor: sensor,)
       ),
     );
   }

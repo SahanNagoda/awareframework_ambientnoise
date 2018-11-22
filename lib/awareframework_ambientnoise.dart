@@ -3,18 +3,17 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:awareframework_core/awareframework_core.dart';
 import 'package:flutter/material.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 
 /// init sensor
-class AmbientnoiseSensor extends AwareSensorCore {
-  static const MethodChannel _ambientnoiseMethod = const MethodChannel('awareframework_ambientnoise/method');
-  static const EventChannel  _ambientnoiseStream  = const EventChannel('awareframework_ambientnoise/event');
+class AmbientNoiseSensor extends AwareSensorCore {
+  static const MethodChannel _ambientNoiseMethod = const MethodChannel('awareframework_ambientnoise/method');
+  static const EventChannel  _ambientNoiseStream  = const EventChannel('awareframework_ambientnoise/event');
 
   /// Init Ambientnoise Sensor with AmbientnoiseSensorConfig
-  AmbientnoiseSensor(AmbientnoiseSensorConfig config):this.convenience(config);
-  AmbientnoiseSensor.convenience(config) : super(config){
+  AmbientNoiseSensor(AmbientnoiseSensorConfig config):this.convenience(config);
+  AmbientNoiseSensor.convenience(config) : super(config){
     /// Set sensor method & event channels
-    super.setSensorChannels(_ambientnoiseMethod, _ambientnoiseStream);
+    super.setSensorChannels(_ambientNoiseMethod, _ambientNoiseStream);
   }
 
   /// A sensor observer instance
@@ -36,17 +35,17 @@ class AmbientnoiseSensorConfig extends AwareSensorConfig{
 }
 
 /// Make an AwareWidget
-class AmbientnoiseCard extends StatefulWidget {
-  AmbientnoiseCard({Key key, @required this.sensor}) : super(key: key);
+class AmbientNoiseCard extends StatefulWidget {
+  AmbientNoiseCard({Key key, @required this.sensor}) : super(key: key);
 
-  AmbientnoiseSensor sensor;
+  AmbientNoiseSensor sensor;
 
   @override
-  AmbientnoiseCardState createState() => new AmbientnoiseCardState();
+  AmbientNoiseCardState createState() => new AmbientNoiseCardState();
 }
 
 
-class AmbientnoiseCardState extends State<AmbientnoiseCard> {
+class AmbientNoiseCardState extends State<AmbientNoiseCard> {
 
   String ambientInfo = "---";
 
