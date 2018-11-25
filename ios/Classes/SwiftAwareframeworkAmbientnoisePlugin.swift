@@ -31,12 +31,14 @@ public class SwiftAwareframeworkAmbientnoisePlugin: AwareFlutterPluginCore, Flut
     }
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        // add own channel
-        super.setChannels(with: registrar,
-                          instance: SwiftAwareframeworkAmbientnoisePlugin(),
-                          methodChannelName: "awareframework_ambientnoise/method",
-                          eventChannelName: "awareframework_ambientnoise/event")
+        let instance = SwiftAwareframeworkAmbientnoisePlugin()
 
+        super.setMethodChannel(with: registrar,
+                               instance: instance,
+                               channelName: "awareframework_ambientnoise/method")
+        super.setEventChannels(with: registrar,
+                               instance: instance,
+                               channelNames: ["awareframework_ambientnoise/event"])
     }
     
     public func onAmbientNoiseChanged(data: AmbientNoiseData) {

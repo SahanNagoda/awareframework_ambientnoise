@@ -15,17 +15,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   AmbientNoiseSensor sensor;
-  AmbientnoiseSensorConfig config;
+  AmbientNoiseSensorConfig config;
 
   @override
   void initState() {
     super.initState();
 
-    config = AmbientnoiseSensorConfig()
+    config = AmbientNoiseSensorConfig()
       ..debug = true;
 
     sensor = new AmbientNoiseSensor(config);
 
+    sensor.start();
   }
 
   @override

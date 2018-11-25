@@ -9,23 +9,29 @@ class AmbientNoiseSensor extends AwareSensorCore {
   static const MethodChannel _ambientNoiseMethod = const MethodChannel('awareframework_ambientnoise/method');
   static const EventChannel  _ambientNoiseStream  = const EventChannel('awareframework_ambientnoise/event');
 
-  /// Init Ambientnoise Sensor with AmbientnoiseSensorConfig
-  AmbientNoiseSensor(AmbientnoiseSensorConfig config):this.convenience(config);
+  AmbientNoiseSensor(AmbientNoiseSensorConfig config):this.convenience(config);
   AmbientNoiseSensor.convenience(config) : super(config){
     /// Set sensor method & event channels
-    super.setSensorChannels(_ambientNoiseMethod, _ambientNoiseStream);
+    super.setMethodChannel(_ambientNoiseMethod);
   }
 
   /// A sensor observer instance
-  Stream<Map<String,dynamic>> get onAmbientNoiseChanged {
-     return super.receiveBroadcastStream("on_data_changed").map((dynamic event) => Map<String,dynamic>.from(event));
+  Stream<Map<String,dynamic>> onAmbientNoiseChanged(String id) {
+    return super.getBroadcastStream(_ambientNoiseStream, "on_data_changed", id).map((dynamic event) => Map<String,dynamic>.from(event));
   }
 }
 
-class AmbientnoiseSensorConfig extends AwareSensorConfig{
-  AmbientnoiseSensorConfig();
+class AmbientNoiseSensorConfig extends AwareSensorConfig{
+  AmbientNoiseSensorConfig({Key key, this.interval, this.samples, this.silenceThreshold});
 
-  /// TODO
+  // Int: Sampling interval in minute. (default = 5)
+  int interval;
+
+  // Int: Data samples to collect per minute. (default = 30)
+  int samples;
+
+  //  Double: A threshold of RMS for determining silence or not. (default = 50)
+  double silenceThreshold;
 
   @override
   Map<String, dynamic> toMap() {
@@ -36,9 +42,10 @@ class AmbientnoiseSensorConfig extends AwareSensorConfig{
 
 /// Make an AwareWidget
 class AmbientNoiseCard extends StatefulWidget {
-  AmbientNoiseCard({Key key, @required this.sensor}) : super(key: key);
+  AmbientNoiseCard({Key key, @required this.sensor, this.cardId}) : super(key: key);
 
   AmbientNoiseSensor sensor;
+  String cardId;
 
   @override
   AmbientNoiseCardState createState() => new AmbientNoiseCardState();
@@ -54,7 +61,7 @@ class AmbientNoiseCardState extends State<AmbientNoiseCard> {
 
     super.initState();
     // set observer
-    widget.sensor.onAmbientNoiseChanged.listen((event) {
+    widget.sensor.onAmbientNoiseChanged(widget.cardId).listen((event) {
       setState((){
         if(event!=null){
           DateTime.fromMicrosecondsSinceEpoch(event['timestamp']);
@@ -78,6 +85,13 @@ class AmbientNoiseCardState extends State<AmbientNoiseCard> {
       title: "Ambient Noise",
       sensor: widget.sensor
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    widget.sensor.cancelBroadcastStream(widget.cardId);
+    super.dispose();
   }
 
 }
