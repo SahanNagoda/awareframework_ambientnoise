@@ -11,8 +11,7 @@ public class SwiftAwareframeworkAmbientnoisePlugin: AwareFlutterPluginCore, Flut
     public func initializeSensor(_ call: FlutterMethodCall, result: @escaping FlutterResult) -> AwareSensor? {
         if self.sensor == nil {
             if let config = call.arguments as? Dictionary<String,Any>{
-                let json = JSON.init(config)
-                self.ambientNoiseSensor = AmbientNoiseSensor.init(AmbientNoiseSensor.Config(json))
+                self.ambientNoiseSensor = AmbientNoiseSensor.init(AmbientNoiseSensor.Config(config))
             }else{
                 self.ambientNoiseSensor = AmbientNoiseSensor.init(AmbientNoiseSensor.Config())
             }

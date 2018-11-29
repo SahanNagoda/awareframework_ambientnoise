@@ -11,13 +11,17 @@ class AmbientNoiseSensor extends AwareSensorCore {
 
   AmbientNoiseSensor(AmbientNoiseSensorConfig config):this.convenience(config);
   AmbientNoiseSensor.convenience(config) : super(config){
-    /// Set sensor method & event channels
     super.setMethodChannel(_ambientNoiseMethod);
   }
 
   /// A sensor observer instance
-  Stream<Map<String,dynamic>> onAmbientNoiseChanged(String id) {
-    return super.getBroadcastStream(_ambientNoiseStream, "on_data_changed", id).map((dynamic event) => Map<String,dynamic>.from(event));
+  Stream<Map<String,dynamic>> get onAmbientNoiseChanged {
+    return super.getBroadcastStream(_ambientNoiseStream, "on_data_changed").map((dynamic event) => Map<String,dynamic>.from(event));
+  }
+
+  @override
+  void cancelAllEventChannels() {
+    super.cancelBroadcastStream("on_data_changed");
   }
 }
 
@@ -42,10 +46,11 @@ class AmbientNoiseSensorConfig extends AwareSensorConfig{
 
 /// Make an AwareWidget
 class AmbientNoiseCard extends StatefulWidget {
-  AmbientNoiseCard({Key key, @required this.sensor, this.cardId}) : super(key: key);
+  AmbientNoiseCard({Key key, @required this.sensor}) : super(key: key);
 
-  AmbientNoiseSensor sensor;
-  String cardId;
+  final AmbientNoiseSensor sensor;
+
+  String ambientInfo = "---";
 
   @override
   AmbientNoiseCardState createState() => new AmbientNoiseCardState();
@@ -54,18 +59,16 @@ class AmbientNoiseCard extends StatefulWidget {
 
 class AmbientNoiseCardState extends State<AmbientNoiseCard> {
 
-  String ambientInfo = "---";
-
   @override
   void initState() {
 
     super.initState();
     // set observer
-    widget.sensor.onAmbientNoiseChanged(widget.cardId).listen((event) {
+    widget.sensor.onAmbientNoiseChanged.listen((event) {
       setState((){
         if(event!=null){
           DateTime.fromMicrosecondsSinceEpoch(event['timestamp']);
-          ambientInfo = event.toString();
+          widget.ambientInfo = event.toString();
         }
       });
     }, onError: (dynamic error) {
@@ -80,7 +83,7 @@ class AmbientNoiseCardState extends State<AmbientNoiseCard> {
     return new AwareCard(
       contentWidget: SizedBox(
           width: MediaQuery.of(context).size.width*0.8,
-          child: new Text(ambientInfo),
+          child: new Text(widget.ambientInfo),
         ),
       title: "Ambient Noise",
       sensor: widget.sensor
@@ -89,8 +92,7 @@ class AmbientNoiseCardState extends State<AmbientNoiseCard> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    widget.sensor.cancelBroadcastStream(widget.cardId);
+    widget.sensor.cancelAllEventChannels();
     super.dispose();
   }
 
