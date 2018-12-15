@@ -1,13 +1,11 @@
 import Flutter
 import UIKit
-import SwiftyJSON
 import com_awareframework_ios_sensor_ambientnoise
 import com_awareframework_ios_sensor_core
 import awareframework_core
 
 public class SwiftAwareframeworkAmbientnoisePlugin: AwareFlutterPluginCore, FlutterPlugin, AwareFlutterPluginSensorInitializationHandler, AmbientNoiseObserver {
     
-
     public func initializeSensor(_ call: FlutterMethodCall, result: @escaping FlutterResult) -> AwareSensor? {
         if self.sensor == nil {
             if let config = call.arguments as? Dictionary<String,Any>{
@@ -37,7 +35,8 @@ public class SwiftAwareframeworkAmbientnoisePlugin: AwareFlutterPluginCore, Flut
                                channelName: "awareframework_ambientnoise/method")
         super.setEventChannels(with: registrar,
                                instance: instance,
-                               channelNames: ["awareframework_ambientnoise/event"])
+                               channelNames: ["awareframework_ambientnoise/event",
+                                              "awareframework_ambientnoise/event_on_data_changed"])
     }
     
     public func onAmbientNoiseChanged(data: AmbientNoiseData) {

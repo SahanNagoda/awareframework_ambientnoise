@@ -1,6 +1,9 @@
-# Aware Ambientnoise
+# Aware Ambient Noise
 
-TODO
+[![Build Status](https://travis-ci.org/awareframework/awareframework_ambientnoise.svg?branch=master)](https://travis-ci.org/awareframework/awareframework_ambientnoise)
+
+Ambient Noise sensor allows us to collect ambient noise information by each period using a phone's microphone.
+The data contains RMS, frequency (Hz), and decibels(dB).
 
 ## Install the plugin into project
 1. Edit `pubspec.yaml`
@@ -16,13 +19,14 @@ import 'package:awareframework_core/awareframework_core.dart';
 ```
 
 ## Public functions
-### ambientnoise Sensor
+### AmbientNoise Sensor
 - `start()`
 - `stop()` 
-- `sync(force: Boolean)`
+- `sync(bool force)`
 - `enable()`
 - `disable()`
 - `isEnable()`
+- `setLabel(String label)`
 
 ### Configuration Keys
 TODO
@@ -45,19 +49,19 @@ The data representations is different between Android and iOS. Following links p
 ## Example usage
 ```dart
 // init config
-var config = AmbientnoiseSensorConfig()
+var config = AmbientNoiseSensorConfig()
   ..debug = true
   ..label = "label";
 
 // init sensor
-var sensor = new AmbientnoiseSensor(config);
+var sensor = new AmbientNoiseSensor(config);
 
-void mathod(){
+void method(){
     /// start 
     sensor.start();
     
     /// set observer
-    sensor.onDataChanged.listen((Map<String,dynamic> result){
+    sensor.onDataChanged.listen(AmbientNoiseData data){
       setState((){
         // Your code here
       });
@@ -70,7 +74,7 @@ void mathod(){
     sensor.sync(true);  
     
     // make a sensor care by the following code
-    var card = new AmbientnoiseCard(sensor:sensor);
+    var card = new AmbientNoiseCard(sensor:sensor);
     // NEXT: Add the card instance into a target Widget.
 }
 
