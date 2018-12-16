@@ -54,7 +54,7 @@ var config = AmbientNoiseSensorConfig()
   ..label = "label";
 
 // init sensor
-var sensor = new AmbientNoiseSensor(config);
+var sensor = new AmbientNoiseSensor.init(config);
 
 void method(){
     /// start 

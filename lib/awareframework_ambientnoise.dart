@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 /// init sensor
 class AmbientNoiseSensor extends AwareSensor {
   static const MethodChannel _ambientNoiseMethod = const MethodChannel('awareframework_ambientnoise/method');
-  static const EventChannel  _ambientNoiseStream  = const EventChannel('awareframework_ambientnoise/event');
+  // static const EventChannel  _ambientNoiseStream  = const EventChannel('awareframework_ambientnoise/event');
   static const EventChannel  _onDataChangedStream  = const EventChannel('awareframework_ambientnoise/event_on_data_changed');
 
   AmbientNoiseData data = AmbientNoiseData();
@@ -88,14 +88,14 @@ class AmbientNoiseCard extends StatefulWidget {
 
   final AmbientNoiseSensor sensor;
 
-  String ambientInfo = "---";
-
   @override
   AmbientNoiseCardState createState() => new AmbientNoiseCardState();
 }
 
 
 class AmbientNoiseCardState extends State<AmbientNoiseCard> {
+
+  String ambientInfo = "---";
 
   @override
   void initState() {
@@ -128,7 +128,7 @@ class AmbientNoiseCardState extends State<AmbientNoiseCard> {
 
   void updateContent(AmbientNoiseData event){
     DateTime.fromMicrosecondsSinceEpoch(event.timestamp);
-    widget.ambientInfo = "Hz:${event.frequency}\nDb:${event.decibels}\nRMS:${event.rms}";
+    ambientInfo = "Hz:${event.frequency}\nDb:${event.decibels}\nRMS:${event.rms}";
   }
 
 
@@ -137,7 +137,7 @@ class AmbientNoiseCardState extends State<AmbientNoiseCard> {
     return new AwareCard(
       contentWidget: SizedBox(
           width: MediaQuery.of(context).size.width*0.8,
-          child: new Text(widget.ambientInfo),
+          child: new Text(ambientInfo),
         ),
       title: "Ambient Noise",
       sensor: widget.sensor
